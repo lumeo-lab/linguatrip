@@ -325,21 +325,20 @@ export default function WorldMap() {
                       strokeWidth={isH ? 1.2 : 0.8}
                       style={{ transition: 'all 0.15s ease' }}
                     />
-                    {/* Flaga (Twemoji) + nazwa */}
+                    {/* Flaga (Twemoji) nad nazwą */}
                     {FLAG_URLS[city.id] && (
                       <image
                         href={FLAG_URLS[city.id]}
-                        x={isH ? -14 : -9}
-                        y={isH ? -26 : -17}
-                        width={isH ? 10 : 7}
-                        height={isH ? 10 : 7}
+                        x={isH ? -5.5 : -3.5}
+                        y={isH ? -32 : -22}
+                        width={isH ? 11 : 7}
+                        height={isH ? 11 : 7}
                         style={{ pointerEvents: 'none', transition: 'all 0.15s ease' }}
                       />
                     )}
                     <text
                       textAnchor="middle"
-                      x={isH ? 3 : 2}
-                      y={isH ? -18 : -11}
+                      y={isH ? -12 : -8}
                       style={{
                         fontSize: isH ? '11px' : '7px',
                         fontFamily: 'system-ui, sans-serif',
@@ -351,20 +350,19 @@ export default function WorldMap() {
                     >
                       {city.name}
                     </text>
-                    {/* "wkrótce" na hover */}
                     {isH && (
                       <text
                         textAnchor="middle"
-                        y={-27}
+                        y={-4}
                         style={{
-                          fontSize: '7px',
+                          fontSize: '6px',
                           fontFamily: 'system-ui, sans-serif',
                           fill: '#4a9eff',
                           fontWeight: '600',
                           pointerEvents: 'none',
                         }}
                       >
-                        🔒 wkrótce
+                        wkrótce
                       </text>
                     )}
                   </g>
@@ -405,21 +403,20 @@ export default function WorldMap() {
                         strokeWidth={isHovered ? 1.3 : 0.9}
                         style={{ transition: 'all 0.15s ease' }}
                       />
-                      {/* Flaga (Twemoji) + nazwa */}
+                      {/* Flaga (Twemoji) nad nazwą */}
                       {FLAG_URLS[dest.id] && (
                         <image
                           href={FLAG_URLS[dest.id]}
-                          x={isHovered ? -14 : -10}
-                          y={isHovered ? -24 : -17}
+                          x={isHovered ? -5 : -3.5}
+                          y={isHovered ? -35 : -24}
                           width={isHovered ? 10 : 7}
                           height={isHovered ? 10 : 7}
-                          style={{ pointerEvents: 'none', transition: 'all 0.15s ease', opacity: 0.7 }}
+                          style={{ pointerEvents: 'none', transition: 'all 0.15s ease', opacity: 0.75 }}
                         />
                       )}
                       <text
                         textAnchor="middle"
-                        x={isHovered ? 3 : 2}
-                        y={isHovered ? -14 : -9}
+                        y={isHovered ? -18 : -10}
                         style={{
                           fontSize: isHovered ? '11px' : '8px',
                           fontFamily: 'system-ui, sans-serif',
@@ -431,13 +428,12 @@ export default function WorldMap() {
                       >
                         {dest.city}
                       </text>
-                      {/* "wkrótce" badge na hover */}
                       {isHovered && (
                         <text
                           textAnchor="middle"
-                          y={-27}
+                          y={-8}
                           style={{
-                            fontSize: '7px',
+                            fontSize: '6px',
                             fontFamily: 'system-ui, sans-serif',
                             fill: '#4a9eff',
                             fontWeight: '600',
@@ -484,12 +480,12 @@ export default function WorldMap() {
                     style={{ cursor: 'pointer', transition: 'r 0.15s ease' }}
                   />
 
-                  {/* Flaga (Twemoji) + nazwa */}
+                  {/* Flaga (Twemoji) nad nazwą */}
                   {FLAG_URLS[dest.id] && (
                     <image
                       href={FLAG_URLS[dest.id]}
-                      x={isSelected || isHovered ? -18 : -13}
-                      y={isSelected || isHovered ? -30 : -23}
+                      x={isSelected || isHovered ? -6.5 : -5}
+                      y={isSelected || isHovered ? -42 : -34}
                       width={isSelected || isHovered ? 13 : 10}
                       height={isSelected || isHovered ? 13 : 10}
                       style={{ pointerEvents: 'none', transition: 'all 0.15s ease' }}
@@ -497,8 +493,7 @@ export default function WorldMap() {
                   )}
                   <text
                     textAnchor="middle"
-                    x={isSelected || isHovered ? 3 : 2}
-                    y={isSelected || isHovered ? -18 : -13}
+                    y={isSelected || isHovered ? -18 : -15}
                     style={{
                       fontSize: isSelected || isHovered ? '13px' : '10px',
                       fontFamily: 'system-ui, sans-serif',
@@ -515,7 +510,7 @@ export default function WorldMap() {
                   {/* Język */}
                   <text
                     textAnchor="middle"
-                    y={isSelected || isHovered ? -9 : -6}
+                    y={isSelected || isHovered ? -9 : -7}
                     style={{
                       fontSize: isSelected || isHovered ? '7px' : '5.5px',
                       fontFamily: 'system-ui, sans-serif',
