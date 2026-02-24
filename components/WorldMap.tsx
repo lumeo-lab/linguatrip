@@ -16,6 +16,31 @@ const XP_THRESHOLDS = [0, 100, 300, 600, 1000, 1500, 2200, 3000];
 
 const GEO_URL = '/countries-110m.json';
 
+// Twemoji CDN — flagi jako obrazki (działają na Windows, Mac, Linux)
+const TW = 'https://cdn.jsdelivr.net/gh/twitter/twemoji@14.0.2/assets/svg';
+const FLAG_URLS: Record<string, string> = {
+  london:     `${TW}/1f1ec-1f1e7.svg`, // 🇬🇧
+  berlin:     `${TW}/1f1e9-1f1ea.svg`, // 🇩🇪
+  madrid:     `${TW}/1f1ea-1f1f8.svg`, // 🇪🇸
+  paris:      `${TW}/1f1eb-1f1f7.svg`, // 🇫🇷
+  rome:       `${TW}/1f1ee-1f1f9.svg`, // 🇮🇹
+  amsterdam:  `${TW}/1f1f3-1f1f1.svg`, // 🇳🇱
+  vienna:     `${TW}/1f1e6-1f1f9.svg`, // 🇦🇹
+  prague:     `${TW}/1f1e8-1f1ff.svg`, // 🇨🇿
+  warsaw:     `${TW}/1f1f5-1f1f1.svg`, // 🇵🇱
+  barcelona:  `${TW}/1f1ea-1f1f8.svg`, // 🇪🇸
+  lisbon:     `${TW}/1f1f5-1f1f9.svg`, // 🇵🇹
+  athens:     `${TW}/1f1ec-1f1f7.svg`, // 🇬🇷
+  budapest:   `${TW}/1f1ed-1f1fa.svg`, // 🇭🇺
+  stockholm:  `${TW}/1f1f8-1f1ea.svg`, // 🇸🇪
+  copenhagen: `${TW}/1f1e9-1f1f0.svg`, // 🇩🇰
+  dublin:     `${TW}/1f1ee-1f1ea.svg`, // 🇮🇪
+  brussels:   `${TW}/1f1e7-1f1ea.svg`, // 🇧🇪
+  zurich:     `${TW}/1f1e8-1f1ed.svg`, // 🇨🇭
+  krakow:     `${TW}/1f1f5-1f1f1.svg`, // 🇵🇱
+  edinburgh:  `${TW}/1f1ec-1f1e7.svg`, // 🇬🇧 (UK jako fallback dla Szkocji)
+};
+
 // Grywalane destynacje [lng, lat]
 const CITY_COORDS: Record<string, [number, number]> = {
   london: [-0.1278, 51.5074],
@@ -300,10 +325,21 @@ export default function WorldMap() {
                       strokeWidth={isH ? 1.2 : 0.8}
                       style={{ transition: 'all 0.15s ease' }}
                     />
-                    {/* Flaga + nazwa */}
+                    {/* Flaga (Twemoji) + nazwa */}
+                    {FLAG_URLS[city.id] && (
+                      <image
+                        href={FLAG_URLS[city.id]}
+                        x={isH ? -14 : -9}
+                        y={isH ? -26 : -17}
+                        width={isH ? 10 : 7}
+                        height={isH ? 10 : 7}
+                        style={{ pointerEvents: 'none', transition: 'all 0.15s ease' }}
+                      />
+                    )}
                     <text
                       textAnchor="middle"
-                      y={isH ? -14 : -8}
+                      x={isH ? 3 : 2}
+                      y={isH ? -18 : -11}
                       style={{
                         fontSize: isH ? '11px' : '7px',
                         fontFamily: 'system-ui, sans-serif',
@@ -311,10 +347,9 @@ export default function WorldMap() {
                         fill: isH ? '#f0f6fc' : 'rgba(180,190,200,0.85)',
                         pointerEvents: 'none',
                         transition: 'all 0.15s ease',
-                        textShadow: '0 1px 3px rgba(0,0,0,0.8)',
                       }}
                     >
-                      {city.flag} {city.name}
+                      {city.name}
                     </text>
                     {/* "wkrótce" na hover */}
                     {isH && (
@@ -370,9 +405,20 @@ export default function WorldMap() {
                         strokeWidth={isHovered ? 1.3 : 0.9}
                         style={{ transition: 'all 0.15s ease' }}
                       />
-                      {/* Flaga + nazwa */}
+                      {/* Flaga (Twemoji) + nazwa */}
+                      {FLAG_URLS[dest.id] && (
+                        <image
+                          href={FLAG_URLS[dest.id]}
+                          x={isHovered ? -14 : -10}
+                          y={isHovered ? -24 : -17}
+                          width={isHovered ? 10 : 7}
+                          height={isHovered ? 10 : 7}
+                          style={{ pointerEvents: 'none', transition: 'all 0.15s ease', opacity: 0.7 }}
+                        />
+                      )}
                       <text
                         textAnchor="middle"
+                        x={isHovered ? 3 : 2}
                         y={isHovered ? -14 : -9}
                         style={{
                           fontSize: isHovered ? '11px' : '8px',
@@ -381,10 +427,9 @@ export default function WorldMap() {
                           fill: isHovered ? '#f0f6fc' : 'rgba(180,190,200,0.8)',
                           pointerEvents: 'none',
                           transition: 'all 0.15s ease',
-                          textShadow: '0 1px 3px rgba(0,0,0,0.9)',
                         }}
                       >
-                        {dest.flag} {dest.city}
+                        {dest.city}
                       </text>
                       {/* "wkrótce" badge na hover */}
                       {isHovered && (
@@ -439,9 +484,20 @@ export default function WorldMap() {
                     style={{ cursor: 'pointer', transition: 'r 0.15s ease' }}
                   />
 
-                  {/* Flaga i nazwa */}
+                  {/* Flaga (Twemoji) + nazwa */}
+                  {FLAG_URLS[dest.id] && (
+                    <image
+                      href={FLAG_URLS[dest.id]}
+                      x={isSelected || isHovered ? -18 : -13}
+                      y={isSelected || isHovered ? -30 : -23}
+                      width={isSelected || isHovered ? 13 : 10}
+                      height={isSelected || isHovered ? 13 : 10}
+                      style={{ pointerEvents: 'none', transition: 'all 0.15s ease' }}
+                    />
+                  )}
                   <text
                     textAnchor="middle"
+                    x={isSelected || isHovered ? 3 : 2}
                     y={isSelected || isHovered ? -18 : -13}
                     style={{
                       fontSize: isSelected || isHovered ? '13px' : '10px',
@@ -453,7 +509,7 @@ export default function WorldMap() {
                       textShadow: '0 1px 4px rgba(0,0,0,0.9)',
                     }}
                   >
-                    {dest.flag} {dest.city}
+                    {dest.city}
                   </text>
 
                   {/* Język */}
