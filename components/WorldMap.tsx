@@ -107,7 +107,7 @@ export default function WorldMap() {
   const xpPercent = Math.min(100, Math.round(((player.xp - xpCurrent) / (xpNext - xpCurrent)) * 100));
 
   return (
-    <div className="min-h-screen flex flex-col" style={{ background: '#060d18' }}>
+    <div className="min-h-screen flex flex-col" style={{ background: '#0d1f35' }}>
 
       {/* ── Pojedynczy pasek nawigacyjny ── */}
       <header
@@ -192,7 +192,7 @@ export default function WorldMap() {
       </header>
 
       {/* MAPA */}
-      <div className="flex-1 relative overflow-hidden" style={{ background: '#07111f' }}>
+      <div className="flex-1 relative overflow-hidden" style={{ background: '#122a50' }}>
         {!mounted ? (
           <div className="w-full h-full flex items-center justify-center" style={{ minHeight: 'calc(100vh - 110px)' }}>
             <div className="text-[#4a9eff] text-sm animate-pulse">Ładowanie mapy…</div>
@@ -240,8 +240,8 @@ export default function WorldMap() {
         >
           <defs>
             <radialGradient id="oceanGrad" cx="50%" cy="50%" r="70%">
-              <stop offset="0%" stopColor="#0d2240" />
-              <stop offset="100%" stopColor="#04090f" />
+              <stop offset="0%" stopColor="#2060a8" />
+              <stop offset="100%" stopColor="#122a50" />
             </radialGradient>
             <filter id="cityGlow" x="-50%" y="-50%" width="200%" height="200%">
               <feGaussianBlur stdDeviation="2" result="blur" />
@@ -277,15 +277,15 @@ export default function WorldMap() {
                       geography={geo}
                       style={{
                         default: {
-                          fill: isEurope ? '#1e3d2f' : '#162b22',
-                          stroke: isEurope ? '#2d5a3d' : '#1a3028',
+                          fill: isEurope ? '#3a7a5a' : '#2a5040',
+                          stroke: isEurope ? '#52a070' : '#3a6850',
                           strokeWidth: 0.3,
                           outline: 'none',
                           filter: 'url(#landShadow)',
                         },
                         hover: {
-                          fill: isEurope ? '#244835' : '#1a3028',
-                          stroke: '#3d7a52',
+                          fill: isEurope ? '#44906a' : '#305a48',
+                          stroke: '#66c088',
                           strokeWidth: 0.4,
                           outline: 'none',
                         },
@@ -310,58 +310,22 @@ export default function WorldMap() {
                     onMouseLeave={() => setHoveredExtra(null)}
                     style={{ cursor: 'pointer' }}
                   >
-                    {/* Glow ring na hover */}
+                    <circle r={isH ? 10 : 0} fill="rgba(74,158,255,0.08)" stroke="none" style={{ transition: 'r 0.2s ease' }} />
                     <circle
-                      r={isH ? 12 : 0}
-                      fill="rgba(74,158,255,0.08)"
-                      stroke="none"
-                      style={{ transition: 'r 0.2s ease' }}
-                    />
-                    {/* Główna kropka */}
-                    <circle
-                      r={isH ? 5.5 : 3.5}
-                      fill={isH ? 'rgba(74,158,255,0.35)' : 'rgba(74,158,255,0.12)'}
-                      stroke={isH ? 'rgba(74,158,255,1)' : 'rgba(74,158,255,0.5)'}
-                      strokeWidth={isH ? 1.2 : 0.8}
+                      r={isH ? 6 : 4}
+                      fill={isH ? 'rgba(74,158,255,0.3)' : 'rgba(74,158,255,0.12)'}
+                      stroke={isH ? 'rgba(74,158,255,1)' : 'rgba(74,158,255,0.45)'}
+                      strokeWidth={0.8}
                       style={{ transition: 'all 0.15s ease' }}
                     />
-                    {/* Flaga (Twemoji) nad nazwą */}
                     {FLAG_URLS[city.id] && (
-                      <image
-                        href={FLAG_URLS[city.id]}
-                        x={isH ? -5.5 : -3.5}
-                        y={isH ? -32 : -22}
-                        width={isH ? 11 : 7}
-                        height={isH ? 11 : 7}
-                        style={{ pointerEvents: 'none', transition: 'all 0.15s ease' }}
-                      />
+                      <image href={FLAG_URLS[city.id]} x={-3.5} y={-22} width={7} height={7} style={{ pointerEvents: 'none' }} />
                     )}
-                    <text
-                      textAnchor="middle"
-                      y={isH ? -12 : -8}
-                      style={{
-                        fontSize: isH ? '11px' : '7px',
-                        fontFamily: 'system-ui, sans-serif',
-                        fontWeight: isH ? '700' : '600',
-                        fill: isH ? '#f0f6fc' : 'rgba(180,190,200,0.85)',
-                        pointerEvents: 'none',
-                        transition: 'all 0.15s ease',
-                      }}
-                    >
+                    <text textAnchor="middle" y={-8} style={{ fontSize: '7px', fontFamily: 'system-ui, sans-serif', fontWeight: '400', fill: isH ? '#f0f6fc' : 'rgba(180,190,200,0.85)', pointerEvents: 'none', transition: 'fill 0.15s ease' }}>
                       {city.name}
                     </text>
                     {isH && (
-                      <text
-                        textAnchor="middle"
-                        y={-4}
-                        style={{
-                          fontSize: '6px',
-                          fontFamily: 'system-ui, sans-serif',
-                          fill: '#4a9eff',
-                          fontWeight: '600',
-                          pointerEvents: 'none',
-                        }}
-                      >
+                      <text textAnchor="middle" y={-1} style={{ fontSize: '5.5px', fontFamily: 'system-ui, sans-serif', fill: '#4a9eff', fontWeight: '400', pointerEvents: 'none' }}>
                         wkrótce
                       </text>
                     )}
@@ -403,43 +367,14 @@ export default function WorldMap() {
                         strokeWidth={isHovered ? 1.3 : 0.9}
                         style={{ transition: 'all 0.15s ease' }}
                       />
-                      {/* Flaga (Twemoji) nad nazwą */}
                       {FLAG_URLS[dest.id] && (
-                        <image
-                          href={FLAG_URLS[dest.id]}
-                          x={isHovered ? -5 : -3.5}
-                          y={isHovered ? -35 : -24}
-                          width={isHovered ? 10 : 7}
-                          height={isHovered ? 10 : 7}
-                          style={{ pointerEvents: 'none', transition: 'all 0.15s ease', opacity: 0.75 }}
-                        />
+                        <image href={FLAG_URLS[dest.id]} x={-3.5} y={-22} width={7} height={7} style={{ pointerEvents: 'none', opacity: 0.75 }} />
                       )}
-                      <text
-                        textAnchor="middle"
-                        y={isHovered ? -18 : -10}
-                        style={{
-                          fontSize: isHovered ? '11px' : '8px',
-                          fontFamily: 'system-ui, sans-serif',
-                          fontWeight: '700',
-                          fill: isHovered ? '#f0f6fc' : 'rgba(180,190,200,0.8)',
-                          pointerEvents: 'none',
-                          transition: 'all 0.15s ease',
-                        }}
-                      >
+                      <text textAnchor="middle" y={-8} style={{ fontSize: '7px', fontFamily: 'system-ui, sans-serif', fontWeight: '400', fill: isHovered ? '#f0f6fc' : 'rgba(180,190,200,0.8)', pointerEvents: 'none', transition: 'fill 0.15s ease' }}>
                         {dest.city}
                       </text>
                       {isHovered && (
-                        <text
-                          textAnchor="middle"
-                          y={-8}
-                          style={{
-                            fontSize: '6px',
-                            fontFamily: 'system-ui, sans-serif',
-                            fill: '#4a9eff',
-                            fontWeight: '600',
-                            pointerEvents: 'none',
-                          }}
-                        >
+                        <text textAnchor="middle" y={-1} style={{ fontSize: '5.5px', fontFamily: 'system-ui, sans-serif', fill: '#4a9eff', fontWeight: '400', pointerEvents: 'none' }}>
                           wkrótce
                         </text>
                       )}
@@ -459,21 +394,21 @@ export default function WorldMap() {
                   onClick={() => handleCityClick(dest)}
                 >
                   {/* Pulse rings */}
-                  <circle r={isSelected || isHovered ? 20 : 15} fill={glowColor} opacity={0.12}>
-                    <animate attributeName="r" values={isSelected ? "16;24;16" : "12;20;12"} dur="2.5s" repeatCount="indefinite" />
+                  <circle r={15} fill={glowColor} opacity={0.12}>
+                    <animate attributeName="r" values="12;20;12" dur="2.5s" repeatCount="indefinite" />
                     <animate attributeName="opacity" values="0.18;0;0.18" dur="2.5s" repeatCount="indefinite" />
                   </circle>
-                  <circle r={isSelected || isHovered ? 11 : 8} fill={glowColor} opacity={0.22}>
-                    <animate attributeName="r" values={isSelected ? "9;14;9" : "6;11;6"} dur="2s" repeatCount="indefinite" />
+                  <circle r={8} fill={glowColor} opacity={0.22}>
+                    <animate attributeName="r" values="6;11;6" dur="2s" repeatCount="indefinite" />
                     <animate attributeName="opacity" values="0.28;0.04;0.28" dur="2s" repeatCount="indefinite" />
                   </circle>
 
                   {/* Pin body */}
                   <circle
-                    r={isSelected || isHovered ? 8 : 6}
+                    r={isSelected || isHovered ? 6 : 4}
                     fill={pinColor}
                     stroke={isSelected ? '#ffffff' : 'rgba(255,255,255,0.7)'}
-                    strokeWidth={isSelected ? 1.8 : 1}
+                    strokeWidth={isSelected ? 1.5 : 1}
                     filter="url(#cityGlow)"
                     onMouseEnter={() => setHoveredCity(dest.id)}
                     onMouseLeave={() => setHoveredCity(null)}
@@ -484,24 +419,23 @@ export default function WorldMap() {
                   {FLAG_URLS[dest.id] && (
                     <image
                       href={FLAG_URLS[dest.id]}
-                      x={isSelected || isHovered ? -6.5 : -5}
-                      y={isSelected || isHovered ? -42 : -34}
-                      width={isSelected || isHovered ? 13 : 10}
-                      height={isSelected || isHovered ? 13 : 10}
-                      style={{ pointerEvents: 'none', transition: 'all 0.15s ease' }}
+                      x={-3.5}
+                      y={-22}
+                      width={7}
+                      height={7}
+                      style={{ pointerEvents: 'none' }}
                     />
                   )}
                   <text
                     textAnchor="middle"
-                    y={isSelected || isHovered ? -18 : -15}
+                    y={-8}
                     style={{
-                      fontSize: isSelected || isHovered ? '13px' : '10px',
+                      fontSize: '7px',
                       fontFamily: 'system-ui, sans-serif',
-                      fontWeight: '800',
+                      fontWeight: '400',
                       fill: isSelected || isHovered ? '#ffd970' : '#ffffff',
                       pointerEvents: 'none',
-                      transition: 'all 0.15s ease',
-                      textShadow: '0 1px 4px rgba(0,0,0,0.9)',
+                      transition: 'fill 0.15s ease',
                     }}
                   >
                     {dest.city}
@@ -510,13 +444,12 @@ export default function WorldMap() {
                   {/* Język */}
                   <text
                     textAnchor="middle"
-                    y={isSelected || isHovered ? -9 : -7}
+                    y={-1}
                     style={{
-                      fontSize: isSelected || isHovered ? '7px' : '5.5px',
+                      fontSize: '5.5px',
                       fontFamily: 'system-ui, sans-serif',
                       fill: 'rgba(240,180,41,0.95)',
                       pointerEvents: 'none',
-                      transition: 'all 0.15s ease',
                     }}
                   >
                     {dest.language}
