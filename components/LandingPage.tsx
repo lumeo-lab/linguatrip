@@ -3,6 +3,7 @@ import { useState, useEffect } from 'react';
 import { motion, AnimatePresence } from 'framer-motion';
 import { useRouter } from 'next/navigation';
 import { useGameStore } from '@/lib/store';
+import { saveProgress } from '@/lib/syncProgress';
 
 interface StarProps {
   width: number; height: number; left: number; top: number;
@@ -49,7 +50,7 @@ type Step = 'hero' | 'choose_avatar' | 'enter_name' | 'choose_level' | 'ready';
 
 export default function LandingPage() {
   const router = useRouter();
-  const { player, setPlayerName, setAvatar, setDifficulty, completeOnboarding, isOnboarded } = useGameStore();
+  const { player, setPlayerName, setAvatar, setDifficulty, completeOnboarding, isOnboarded, userId, scenarioResults, destinationProgress, vocabulary } = useGameStore();
   const [step, setStep] = useState<Step>('hero');
   const [localName, setLocalName] = useState('');
 
@@ -78,6 +79,9 @@ export default function LandingPage() {
 
   const handleStart = () => {
     completeOnboarding();
+    if (userId) {
+      saveProgress(userId, { player, isOnboarded: true, destinationProgress, scenarioResults, vocabulary });
+    }
     router.push('/map');
   };
 

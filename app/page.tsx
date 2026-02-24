@@ -2,6 +2,7 @@
 import { useState, useEffect } from 'react';
 import { supabase } from '@/lib/supabase';
 import { useGameStore } from '@/lib/store';
+import { loadProgress } from '@/lib/syncProgress';
 import LandingPage from '@/components/LandingPage';
 import AuthScreen from '@/components/AuthScreen';
 import type { User } from '@supabase/supabase-js';
@@ -9,7 +10,7 @@ import type { User } from '@supabase/supabase-js';
 export default function Home() {
   const [user, setUser] = useState<User | null | undefined>(undefined);
   const [hydrated, setHydrated] = useState(false);
-  const { setUserId, resetAll } = useGameStore();
+  const { setUserId, resetAll, restoreFromCloud } = useGameStore();
 
   // Krok 1: czekaj aż Zustand wczyta dane z localStorage
   useEffect(() => {
@@ -40,14 +41,17 @@ export default function Home() {
     return () => subscription.unsubscribe();
   }, [hydrated]);
 
-  const checkUser = (incomingId: string) => {
+  const checkUser = async (incomingId: string) => {
     const storedId = useGameStore.getState().userId;
     if (storedId !== incomingId) {
-      // Inne konto lub pierwsze logowanie — resetuj i przypisz nowe ID
       resetAll();
       setUserId(incomingId);
     }
-    // Jeśli userId pasuje — dane zachowane, nic nie robimy
+    // Zawsze wczytaj z chmury — Supabase = source of truth
+    const cloudData = await loadProgress(incomingId);
+    if (cloudData) {
+      restoreFromCloud(cloudData);
+    }
   };
 
   if (!hydrated || user === undefined) {

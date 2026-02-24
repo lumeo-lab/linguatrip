@@ -5,6 +5,7 @@
 import { create } from 'zustand';
 import { persist } from 'zustand/middleware';
 import type { Player, VocabularyItem, DestinationProgress, ScenarioResult, ActiveScenarioState, DifficultyLevel } from './types';
+import type { CloudData } from './syncProgress';
 
 interface GameStore {
   // ---------- Gracz ----------
@@ -45,9 +46,10 @@ interface GameStore {
   addVocabularyItem: (item: VocabularyItem) => void;
   markReviewed: (wordId: string) => void;
 
-  // ---------- Reset ----------
+  // ---------- Reset / Sync ----------
   resetAll: () => void;
   setUserId: (id: string) => void;
+  restoreFromCloud: (data: CloudData) => void;
 }
 
 const DEFAULT_PLAYER: Player = {
@@ -265,6 +267,15 @@ export const useGameStore = create<GameStore>()(
         }),
 
       setUserId: (id) => set({ userId: id }),
+
+      restoreFromCloud: (data) =>
+        set({
+          player: data.player,
+          isOnboarded: data.isOnboarded,
+          destinationProgress: data.destinationProgress,
+          scenarioResults: data.scenarioResults,
+          vocabulary: data.vocabulary,
+        }),
 
       addVocabularyItem: (item) =>
         set((state) => ({

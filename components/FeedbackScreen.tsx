@@ -4,12 +4,13 @@ import { motion } from 'framer-motion';
 import { useRouter, useSearchParams } from 'next/navigation';
 import { useGameStore } from '@/lib/store';
 import { BADGES } from '@/lib/gameData';
+import { saveProgress } from '@/lib/syncProgress';
 import GameHUD from './GameHUD';
 
 export default function FeedbackScreen() {
   const router = useRouter();
   const params = useSearchParams();
-  const { player, vocabulary, activeScenario, resetActiveScenario } = useGameStore();
+  const { player, vocabulary, activeScenario, resetActiveScenario, scenarioResults, destinationProgress, isOnboarded, userId } = useGameStore();
 
   const scenarioId = params.get('scenario') ?? '';
   const starsParam = parseInt(params.get('stars') ?? '1') as 1 | 2 | 3;
@@ -17,6 +18,14 @@ export default function FeedbackScreen() {
 
   const [starsShown, setStarsShown] = useState(0);
   const [showBadge, setShowBadge] = useState(false);
+
+  // Zapisz postęp do chmury
+  useEffect(() => {
+    if (userId) {
+      saveProgress(userId, { player, isOnboarded, destinationProgress, scenarioResults, vocabulary });
+    }
+  // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, []);
 
   // Animacja gwiazdek
   useEffect(() => {
