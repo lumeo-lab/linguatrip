@@ -41,13 +41,15 @@ function StatCard({ icon, value, label }: { icon: string; value: string | number
 
 export default function ProfileScreen() {
   const router = useRouter();
-  const { player, scenarioResults, vocabulary, resetAll } = useGameStore();
+  const { player, scenarioResults, vocabulary } = useGameStore();
   const [loggingOut, setLoggingOut] = useState(false);
 
   const handleLogout = async () => {
     setLoggingOut(true);
     await supabase.auth.signOut();
-    resetAll();
+    // Nie czyścimy danych gry — zostaną w localStorage
+    // checkUser() w app/page.tsx przywróci je przy ponownym logowaniu tego samego użytkownika
+    // lub wyczyści jeśli zaloguje się ktoś inny
     router.push('/');
   };
 
