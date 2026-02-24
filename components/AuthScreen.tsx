@@ -30,8 +30,15 @@ export default function AuthScreen() {
     setLoading(true);
     try {
       if (mode === 'register') {
-        const { error: err } = await supabase.auth.signUp({ email, password });
+        const { data, error: err } = await supabase.auth.signUp({ email, password });
         if (err) throw err;
+        // Supabase przy wyłączonym confirm email zwraca identities: [] dla istniejącego konta
+        if (data.user && data.user.identities && data.user.identities.length === 0) {
+          setError('Ten email jest już zarejestrowany. Zaloguj się.');
+          setMode('login');
+          setLoading(false);
+          return;
+        }
         setSuccess('Konto założone! Możesz się teraz zalogować.');
         setMode('login');
         setPassword('');

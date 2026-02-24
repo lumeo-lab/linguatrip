@@ -10,6 +10,7 @@ interface GameStore {
   // ---------- Gracz ----------
   player: Player;
   isOnboarded: boolean;
+  userId: string | null;  // Supabase user ID — guard przed mieszaniem kont
 
   // ---------- Postęp ----------
   destinationProgress: DestinationProgress[];
@@ -46,6 +47,7 @@ interface GameStore {
 
   // ---------- Reset ----------
   resetAll: () => void;
+  setUserId: (id: string) => void;
 }
 
 const DEFAULT_PLAYER: Player = {
@@ -77,6 +79,7 @@ export const useGameStore = create<GameStore>()(
     (set, get) => ({
       player: DEFAULT_PLAYER,
       isOnboarded: false,
+      userId: null,
       destinationProgress: [],
       scenarioResults: [],
       activeScenario: null,
@@ -254,11 +257,14 @@ export const useGameStore = create<GameStore>()(
         set({
           player: DEFAULT_PLAYER,
           isOnboarded: false,
+          userId: null,
           destinationProgress: [],
           scenarioResults: [],
           activeScenario: null,
           vocabulary: [],
         }),
+
+      setUserId: (id) => set({ userId: id }),
 
       addVocabularyItem: (item) =>
         set((state) => ({
