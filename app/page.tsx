@@ -8,34 +8,49 @@ import type { User } from '@supabase/supabase-js';
 
 export default function Home() {
   const [user, setUser] = useState<User | null | undefined>(undefined);
-  const { userId, setUserId, resetAll } = useGameStore();
+  const [hydrated, setHydrated] = useState(false);
+  const { setUserId, resetAll } = useGameStore();
 
+  // Krok 1: czekaj aż Zustand wczyta dane z localStorage
   useEffect(() => {
+    if (useGameStore.persist.hasHydrated()) {
+      setHydrated(true);
+    } else {
+      const unsub = useGameStore.persist.onFinishHydration(() => setHydrated(true));
+      return unsub;
+    }
+  }, []);
+
+  // Krok 2: sprawdź auth dopiero po rehydracji
+  useEffect(() => {
+    if (!hydrated) return;
+
     supabase.auth.getSession().then(({ data: { session } }) => {
       const u = session?.user ?? null;
       setUser(u);
-      if (u) handleUserLogin(u.id);
+      if (u) checkUser(u.id);
     });
 
     const { data: { subscription } } = supabase.auth.onAuthStateChange((_event, session) => {
       const u = session?.user ?? null;
       setUser(u);
-      if (u) handleUserLogin(u.id);
+      if (u) checkUser(u.id);
     });
 
     return () => subscription.unsubscribe();
-  }, []);
+  }, [hydrated]);
 
-  const handleUserLogin = (incomingId: string) => {
-    // Jeśli store należy do innego użytkownika — resetuj
+  const checkUser = (incomingId: string) => {
     const storedId = useGameStore.getState().userId;
     if (storedId !== incomingId) {
+      // Inne konto lub pierwsze logowanie — resetuj i przypisz nowe ID
       resetAll();
       setUserId(incomingId);
     }
+    // Jeśli userId pasuje — dane zachowane, nic nie robimy
   };
 
-  if (user === undefined) {
+  if (!hydrated || user === undefined) {
     return (
       <div className="min-h-screen flex items-center justify-center" style={{ background: '#0d1117' }}>
         <div className="text-center">
